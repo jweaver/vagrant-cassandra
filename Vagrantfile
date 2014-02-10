@@ -14,14 +14,13 @@ cassandra_tokens = []
   ip = network + (first_ip + i).to_s
   seeds << ip
   servers << {'name' => name,
-              'ip' => ip,
-              'initial_token' => 2**127 / server_count * i}
+              'ip' => ip}
 end
 
 Vagrant::Config.run do |config|
   servers.each do |server|
     config.vm.define server['name'] do |config2|
-      config2.vm.box = "precise"
+      config2.vm.box = "precise64"
       config2.vm.box_url = "http://files.vagrantup.com/precise64.box"
       config2.vm.host_name = server['name']
       config2.vm.network :hostonly, server['ip']
@@ -33,11 +32,19 @@ Vagrant::Config.run do |config|
         chef.add_recipe "java"
         chef.add_recipe "cassandra::tarball"
         chef.json = {
-          :cassandra => {'cluster_name' => 'My Cluster',
-                         'initial_token' => server['initial_token'],
-                         'seeds' => seeds.join(","),
+            :java => {
+                        'install_flavor' => 'oracle',
+                        'oracle' => {
+                            'accept_oracle_download_terms' => true
+                        },
+                        :jdk_version => '7'
+                        },
+            :cassandra => {'cluster_name' => 'My Cluster',
+                         'seeds' => '192.168.2.10', #seeds.join(","),
                          'listen_address' => server['ip'],
-                         'rpc_address' => server['ip']}
+                         'rpc_address' => server['ip'],
+                         :version => '2.0.4'
+                         }
         }
       end
     end
