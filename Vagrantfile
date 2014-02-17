@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 ## Cassandra cluster settings
-server_count = 3
+server_count = 1
 network = '192.168.2.'
 first_ip = 10
 
@@ -40,8 +40,9 @@ Vagrant::Config.run do |config|
                         :jdk_version => '7'
                         },
             :cassandra => {'cluster_name' => 'My Cluster',
-                         'seeds' => '192.168.2.10', #seeds.join(","),
+                         'seeds' => network + (first_ip).to_s, #seeds.join(","),
                          'listen_address' => server['ip'],
+                         'broadcast_address' => server['ip'],
                          'rpc_address' => server['ip'],
                          :version => '2.0.4'
                          }
