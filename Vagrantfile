@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 ## Cassandra cluster settings
-server_count = 1
+server_count = 5
 network = '192.168.2.'
 first_ip = 10
 
