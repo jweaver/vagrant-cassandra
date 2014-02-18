@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 ## Cassandra cluster settings
-server_count = 5
+server_count = 3
 network = '192.168.2.'
 first_ip = 10
 
@@ -30,6 +30,7 @@ Vagrant::Config.run do |config|
         chef.cookbooks_path = ["vagrant/cookbooks", "vagrant/site-cookbooks"]
         chef.add_recipe "updater"
         chef.add_recipe "java"
+        chef.add_recipe "cassandra::jna"
         chef.add_recipe "cassandra::tarball"
         chef.json = {
             :java => {
@@ -40,6 +41,7 @@ Vagrant::Config.run do |config|
                         :jdk_version => '7'
                         },
             :cassandra => {'cluster_name' => 'My Cluster',
+                         'vnodes' => '256',
                          'seeds' => network + (first_ip).to_s, #seeds.join(","),
                          'listen_address' => server['ip'],
                          'broadcast_address' => server['ip'],
