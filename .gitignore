@@ -1,5 +1,4 @@
 /.vagrant/*
 /vagrant/Cheffile.lock
 /vagrant/cookbooks/*
-/vagrant/site-cookbooks/*
 /vagrant/tmp/*
